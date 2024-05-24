@@ -116,13 +116,15 @@ class PrivateIngredientsApiTests(TestCase):
             user = self.user,
         )
 
+        recipe.ingredients.add(in1)
+
         res = self.client.get(INGREDIENTS_URL, {'assigned_only':1})
 
         s1 = IngredientSerializer(in1)
-        s2 - IngredientSerializer(in2)
+        s2 = IngredientSerializer(in2)
 
         self.assertIn(s1.data, res.data)
-        self.assertIn(s1.data, res.data)
+        self.assertNotIn(s2.data, res.data)
 
     def test_filtered_ingredients_unique(self):
         """Test filtered ingredients returns a unique list."""
