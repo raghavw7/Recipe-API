@@ -105,7 +105,7 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ['id', 'image', 'image_url']
         read_only_fields = ['id']
-        extra_kwargs = {'image': {'required' : 'True'}}
+        # extra_kwargs = {'image': {'required' : 'True'}}
 
     def validate(self, attrs):
         if not attrs.get('image') and not attrs.get('image_url'):
