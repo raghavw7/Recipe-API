@@ -7,6 +7,9 @@ from core.models import (
     Tag,
     Ingredient,
 )
+import requests
+from django.core.files.base import ContentFile
+
 
 class IngredientSerializer(serializers.ModelSerializer):
     """Serializer for ingredients."""
@@ -97,10 +100,26 @@ class RecipeDetailSerializer(RecipeSerializer):
 
 class RecipeImageSerializer(serializers.ModelSerializer):
     """Serializer for uploading images to recipes."""
-
+    image_url = serializers.URLField(write_only=True, required=False)
     class Meta:
         model = Recipe
-        fields = ['id', 'image']
+        fields = ['id', 'image', 'image_url']
         read_only_fields = ['id']
         extra_kwargs = {'image': {'required' : 'True'}}
 
+    def validate(self, attrs):
+        if not attrs.get('image') and not attrs.get('image_url'):
+            raise serializers.ValidationError('Either image or image_url must be provided!')
+        return attrs
+
+    def save(self, **kwargs):
+        image_url = self.validated_data.get('image_url', None)
+
+        if image_url:
+            response = requests.get(image_url)
+            response.raise_for_status()
+            image_name = image_url.split("/")[-1]
+            image_file = ContentFile(response.content, name=image_name)
+            self.validated_data['image'] = image_file
+
+        return super().save(**kwargs)
