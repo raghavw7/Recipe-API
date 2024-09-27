@@ -22,6 +22,10 @@ ALLOWED_HOSTS.extend(
     )
 )
 
+CORS_ALLOWED_ORIGINS = [
+    "https://recipe-front-4ybpjl2tg-raghavs-projects-825676f7.vercel.app",
+    "http://localhost:3000",
+]
 
 # Application definition
 
@@ -38,11 +42,13 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'user',
     'recipe',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
