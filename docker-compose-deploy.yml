@@ -34,11 +34,10 @@ services:
     depends_on:
       - app
     ports:
-      - "80:8000"
+      - "80:80"
       - "443:443"
     environment:
       - SERVER_NAME=ec2-3-110-101-11.ap-south-1.compute.amazonaws.com
-      - LISTEN_PORT=8000
     volumes:
       - static-data:/vol/static
 

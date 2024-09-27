@@ -1,5 +1,5 @@
 server {
-    listen ${LISTEN_PORT};
+    listen 80;
     server_name ${SERVER_NAME};
 
     location /.well-known/acme-challenge/ {
@@ -18,7 +18,7 @@ server {
     server_name ${SERVER_NAME};
 
     ssl_certificate /etc/nginx/ssl/live/${SERVER_NAME}/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ss/live/${SERVER_NAME}/privkey.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/${SERVER_NAME}/privkey.pem;
 
         location /static {
         alias /vol/static;
