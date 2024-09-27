@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOSTS'), 'recipe-front-nine.vercel.app', 'https://recipe-front-raghavs-projects-825676f7.vercel.app', 'ec2-3-110-101-11.ap-south-1.compute.amazonaws.com']
 ALLOWED_HOSTS.extend(
     filter(
         None,
@@ -23,8 +23,11 @@ ALLOWED_HOSTS.extend(
 )
 
 CORS_ALLOWED_ORIGINS = [
+    "https://recipe-front-nine.vercel.app",
+    "https://recipe-front-raghavs-projects-825676f7.vercel.app",
     "https://recipe-front-4ybpjl2tg-raghavs-projects-825676f7.vercel.app",
     "http://localhost:3000",
+    "https://ec2-3-110-101-11.ap-south-1.compute.amazonaws.com",
 ]
 
 # Application definition
