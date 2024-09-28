@@ -1,24 +1,5 @@
 server {
-    listen 80;
-    server_name ${SERVER_NAME} www.${SERVER_NAME};
-
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-
-    location / {
-        return 301 https://$host$request_uri;
-    }
-
-
-}
-
-server {
-    listen 443 ssl;
-    server_name ${SERVER_NAME} www.${SERVER_NAME};
-
-    ssl_certificate /etc/nginx/ssl/live/${SERVER_NAME}/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/live/${SERVER_NAME}/privkey.pem;
+    listen ${LISTEN_PORT};
 
     location /static {
         alias /vol/static;
