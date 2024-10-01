@@ -19,6 +19,7 @@ ALLOWED_HOSTS.extend(
 
 CORS_ALLOWED_ORIGINS = [
     "https://recipe-front-4ybpjl2tg-raghavs-projects-825676f7.vercel.app",
+    "https://recipe-front-nine.vercel.app",
     "http://localhost:3000",
 ]
 
