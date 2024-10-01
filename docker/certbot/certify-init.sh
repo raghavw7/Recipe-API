@@ -2,9 +2,9 @@
 
 set -e
 
-until nc -x proxy 80; do
-    echo "Waiting for proxy..."
-    sleep 5s & wait ${!}
+until nc -z -w 5 proxy 80; do
+    echo "Waiting for proxy to be available at port 80!..."
+    sleep 5s
 done
 
 echo "Getting certificate..."
