@@ -89,7 +89,18 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
 
+        if instance.image and request:
+            image_url = request.build_absolute_uri(instance.image.url)
+            if request.is_secure():
+                representation['image'] = image_url.replace("http://", "https://")
+            else:
+                representation['image'] = image_url
+
+        return representation
 
 class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view."""
