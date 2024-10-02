@@ -26,7 +26,14 @@ server {
 
     location /static {
         alias /vol/static;
+        try_files $uri $uri/ =404;
     }
+
+    location /media {
+        alias /vol/web/media;
+        try_files $uri $uri/ =404;
+    }
+
 
     location / {
         uwsgi_pass ${APP_HOST}:${APP_PORT};

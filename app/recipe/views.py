@@ -107,6 +107,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 @extend_schema_view(
     list = extend_schema(
         parameters=[
