@@ -9,7 +9,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = ['raghavgupta.site', 'www.raghavgupta.site']
+ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
     filter(
         None,
@@ -21,7 +21,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://recipe-front-4ybpjl2tg-raghavs-projects-825676f7.vercel.app",
     "https://recipe-front-nine.vercel.app",
     "http://localhost:3000",
-    "https://raghavgupta.site"
+    "https://raghavgupta.site",
 ]
 
 # Application definition
@@ -124,8 +124,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/static/'
-MEDIA_URL = '/static/media/'
+STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
 
 MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
@@ -133,8 +133,8 @@ STATIC_ROOT = '/vol/web/static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 # SECURE_SSL_REDIRECT = True
 
 
