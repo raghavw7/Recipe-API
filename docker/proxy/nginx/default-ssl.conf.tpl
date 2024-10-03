@@ -29,11 +29,11 @@ server {
         try_files $uri $uri/ =404;
     }
 
-    location static/media {
-        alias vol/web/media;
+    location /static/media/ {
+        alias /vol/web/media/;
         try_files $uri $uri/ =404;
     }
-    
+
     location / {
         uwsgi_pass ${APP_HOST}:${APP_PORT};
         include /etc/nginx/uwsgi_params;
