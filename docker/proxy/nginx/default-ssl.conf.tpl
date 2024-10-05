@@ -25,12 +25,7 @@ server {
     add_header Strict-Transport_Security "max-age=31536000; includeSubDomains" always;
 
     location /static {
-        alias /vol/static/;
-        try_files $uri $uri/ =404;
-    }
-
-    location /media {
-        alias /vol/web/media/;
+        alias /vol/static;
         try_files $uri $uri/ =404;
     }
 
