@@ -13,7 +13,8 @@ from drf_spectacular.utils import (
 from rest_framework import (
     viewsets,
     mixins,
-    status
+    status,
+filters,
 )
 
 from rest_framework.decorators import action
@@ -52,6 +53,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    search_fields = ['title']   #added 17/10/2024
+    filter_backends = (filters.SearchFilter,) #added 17/10/2024
 
     def _params_to_ints(self, qs):
         """Convert a list of strings to integers."""
