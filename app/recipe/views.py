@@ -56,6 +56,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     search_fields = ['title']   #added 17/10/2024
     filter_backends = (filters.SearchFilter,) #added 17/10/2024
 
+
     def _params_to_ints(self, qs):
         """Convert a list of strings to integers."""
         """1, 2, 3"""
@@ -71,7 +72,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if tags:
             tags_ids = self._params_to_ints(tags)
-            queryset = queryset.filter(tags__id__in=tags_ids)
+            for tag_id in tags_ids:
+                queryset = queryset.filter(tags__id=tag_id)
 
         if ingredients:
             ingredients_id = self._params_to_ints(ingredients)
