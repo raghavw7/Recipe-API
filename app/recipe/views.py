@@ -21,7 +21,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from django.db.models import Count
 from core.models import (
     Recipe,
     Tag,
@@ -72,8 +72,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if tags:
             tags_ids = self._params_to_ints(tags)
-            for tag_id in tags_ids:
-                queryset = queryset.filter(tags__id=tag_id)
+            queryset = queryset.filter(tags__id__in=tags_ids).annotate(matching_tags=Count('tags', filter = Q(tags__id__in=tags_ids))).filter(matching_tags=len(tags_ids))
 
         if ingredients:
             ingredients_id = self._params_to_ints(ingredients)
