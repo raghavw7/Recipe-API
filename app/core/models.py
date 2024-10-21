@@ -97,3 +97,14 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Liked(models.Model):
+    """Like relationship b/w users and recipes"""
+
+    liked_recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
