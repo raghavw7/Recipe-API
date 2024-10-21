@@ -72,16 +72,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if tags:
             tags_ids = self._params_to_ints(tags)
-            # queryset = queryset.filter(tags__id__in=tags_ids).annotate(matching_tags=Count('tags', filter = Q(tags__id__in=tags_ids))).filter(matching_tags=len(tags_ids))
-            queryset = queryset.annotate(
-                num_tags=Count('tags')
-            ).filter(
-                tags__id__in=tags_ids
-            ).annotate(
-                matching_tags=Count('tags', filter=Q(tags__id__in=tags_ids), distinct=True)
-            ).filter(
-                matching_tags=len(tags_ids)
-            )
+            for tag_id in tags_ids:
+                queryset = queryset.filter(tags__id=tag_id)
+
         if ingredients:
             ingredients_id = self._params_to_ints(ingredients)
             queryset = queryset.filter(ingredients__id__in=ingredients_id)
