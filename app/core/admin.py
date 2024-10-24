@@ -49,12 +49,17 @@ class UserAdmin(BaseUserAdmin):
     def has_change_permission(self, request, obj=None):
         if obj is not None and obj.id == request.user.id:
             return True
-        return super().has_change_permission(request, obj)
+        return request.user.is_superuser or super().has_change_permission(request, obj)
 
     def has_view_permission(self, request, obj=None):
         if obj is not None and obj.id == request.user.id:
             return True
         return super().has_view_permission(request, obj)
+
+    def has_module_permission(self, request):
+        if request.user.is_superuser or request.user.is_active:
+            return True
+        return False
 
 
 admin.site.register(models.User, UserAdmin)
