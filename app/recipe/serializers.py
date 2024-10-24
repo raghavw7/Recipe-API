@@ -9,7 +9,13 @@ from core.models import (
 )
 import requests
 from django.core.files.base import ContentFile
+from django.contrib.auth import get_user_model
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'email', 'name']
+        read_only_fields = ['id']
 
 class IngredientSerializer(serializers.ModelSerializer):
     """Serializer for ingredients."""
@@ -30,6 +36,7 @@ class TagSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     """Serializer for recipes."""
 
+    user = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, required=False)
     ingredients = IngredientSerializer(many=True, required=False)
 

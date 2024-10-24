@@ -15,6 +15,7 @@ from rest_framework import (
     mixins,
     status,
 filters,
+generics,
 )
 
 from rest_framework.decorators import action
@@ -29,6 +30,15 @@ from core.models import (
 )
 
 from recipe import serializers
+
+
+class UserDetailView(generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
 
 @extend_schema_view(
     list = extend_schema(
