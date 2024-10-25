@@ -27,6 +27,7 @@ from core.models import (
     Recipe,
     Tag,
     Ingredient,
+Liked,
 )
 
 from recipe import serializers
@@ -118,14 +119,48 @@ class RecipeViewSet(viewsets.ModelViewSet):
         instance.delete()
     @action(detail=False, methods=['get'], url_path='user-recipes')
     def user_recipes(self, request):
-        user_recipes = self.queryset.filter(user=request.user).order_by('-id')
-        serializer = self.get_serializer(user_recipes, many=True)
+
+        user = request.user
+        queryset = self.queryset.filter(owner=user)
+
+        search_query = request.query_params.get('search')
+        tags = request.query_params.get('tags')
+        ingredients = request.query_params.get('ingredients')
+
+        if search_query:
+            queryset = queryset.filter(title__icontains=search_query)
+
+        if tags:
+            queryset = queryset.filter(tags__id__in=tags.split(','))
+
+        if ingredients:
+            queryset = queryset.filter(ingredients__id__in=tags.split(''))
+
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='liked-recipes')
     def liked_recipes(self, request):
-        liked_recipes = Recipe.objects.filter(liked__user = request.user).distinct().order_by('-id')
-        serializer = self.get_serializer(liked_recipes, many=True)
+        user = request.user
+        liked_recipe_ids = Liked.objects.filter(user=user).values_list('liked_recipe__id', flat=True)
+        queryset = self.queryset.filter(id__in=liked_recipe_ids)
+
+        search_query = request.query_params.get('search')
+        tags = request.query_params.get('tags')
+        ingredients = request.query_params.get('ingredients')
+
+        if search_query:
+            queryset = queryset.filter(title__icontains=search_query)
+
+        if tags:
+            queryset = queryset.filter(tags__id__in=tags.split(','))
+
+        if ingredients:
+            queryset = queryset.filter(ingredients__id__in=tags.split(''))
+
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='all-recipes')
