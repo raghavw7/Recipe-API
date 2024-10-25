@@ -90,9 +90,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             for ingredient_id in ingredients_id:
                 queryset = queryset.filter(ingredients__id=ingredient_id)
 
-        return queryset.filter(
-            user=self.request.user
-            ).order_by('-id').distinct()
+        return queryset.order_by('-id').distinct()
 
     def get_serializer_class(self):
         """Return the serializer class for request."""
@@ -109,6 +107,32 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """Create a new recipe."""
         serializer.save(user=self.request.user)
 
+    def perform_update(self, serializer):
+        if serializer.instance.user != self.request.user:
+            return Response({'detail': 'Not authorised to update this recipe.'}, status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            return Response({'detail': 'Not authorised to update this recipe.'}, status=status.HTTP_403_FORBIDDEN)
+        instance.delete()
+    @action(detail=False, methods=['get'], url_path='user-recipes')
+    def user_recipes(self, request):
+        user_recipes = self.queryset.filter(user=request.user).order_by('-id')
+        serializer = self.get_serializer(user_recipes, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='liked-recipes')
+    def liked_recipes(self, request):
+        liked_recipes = Recipe.objects.filter(liked__user = request.user).distinct().order_by('-id')
+        serializer = self.get_serializer(liked_recipes, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='all-recipes')
+    def all_recipes(self, request):
+        all_recipes=self.queryset.order_by('id')
+        serializer = self.get_serializer(all_recipes, many=True)
+        return Response(serializer.data)
 
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
