@@ -121,7 +121,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def user_recipes(self, request):
 
         user = request.user
-        queryset = self.queryset.filter(owner=user)
+        queryset = self.queryset.filter(user=user)
 
         search_query = request.query_params.get('search')
         tags = request.query_params.get('tags')
@@ -134,7 +134,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(tags__id__in=tags.split(','))
 
         if ingredients:
-            queryset = queryset.filter(ingredients__id__in=tags.split(''))
+            queryset = queryset.filter(ingredients__id__in=tags.split(','))
 
 
         serializer = self.get_serializer(queryset, many=True)
@@ -157,7 +157,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(tags__id__in=tags.split(','))
 
         if ingredients:
-            queryset = queryset.filter(ingredients__id__in=tags.split(''))
+            queryset = queryset.filter(ingredients__id__in=tags.split(','))
 
 
         serializer = self.get_serializer(queryset, many=True)
