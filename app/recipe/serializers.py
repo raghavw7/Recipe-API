@@ -6,6 +6,7 @@ from core.models import (
     Recipe,
     Tag,
     Ingredient,
+Liked,
 )
 import requests
 from django.core.files.base import ContentFile
@@ -39,10 +40,11 @@ class RecipeSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, required=False)
     ingredients = IngredientSerializer(many=True, required=False)
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'time_minutes', 'price', 'link', 'tags', 'ingredients', 'image', 'user']
+        fields = ['id', 'title', 'time_minutes', 'price', 'link', 'tags', 'ingredients', 'image', 'user', 'is_liked']
         read_only_fields = ['id', 'user']
 
     def _get_or_create_tags(self, tags, recipe):
@@ -50,11 +52,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         auth_user = self.context['request'].user
         for tag in tags:
             tag_obj, created = Tag.objects.get_or_create(
-                user = auth_user,
+                user= auth_user,
                 **tag
             )
             recipe.tags.add(tag_obj)
 
+
+    def get_is_liked(self, obj):
+        auth_user = self.context['request'].user
+        return Liked.objects.filter(user=auth_user, liked_recipe=obj).exists()
 
     def _get_or_create_ingredients(self, ingredients, recipe):
         """Handle getting or creating ingredients as needed."""

@@ -169,6 +169,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(all_recipes, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['post'], url_path='like')
+    def like_recipe(self, request, pk=None):
+        recipe = self.get_object()
+        user = request.user
+
+        liked_instance = Liked.objects.filter(user=user, liked_recipe=recipe).first()
+        if liked_instance:
+            liked_instance.delete()
+            return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            Liked.objects.create(user=user, liked_recipe=recipe)
+            return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)
+
+
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
         """Upload an image to recipe."""
