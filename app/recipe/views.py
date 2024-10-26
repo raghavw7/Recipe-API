@@ -134,7 +134,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(tags__id__in=tags.split(','))
 
         if ingredients:
-            queryset = queryset.filter(ingredients__id__in=tags.split(','))
+            queryset = queryset.filter(ingredients__id__in=ingredients.split(','))
 
 
         serializer = self.get_serializer(queryset, many=True)
@@ -157,7 +157,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(tags__id__in=tags.split(','))
 
         if ingredients:
-            queryset = queryset.filter(ingredients__id__in=tags.split(','))
+            queryset = queryset.filter(ingredients__id__in=ingredients.split(','))
 
 
         serializer = self.get_serializer(queryset, many=True)
@@ -169,7 +169,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(all_recipes, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'], serializer_class=LikeSerializer)
+    @action(detail=True, methods=['post'], serializer_class=serializers.LikeSerializer)
     def like_recipe(self, request, pk=None):
         recipe = self.get_object()
         user = request.user

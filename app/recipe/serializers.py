@@ -150,4 +150,4 @@ class RecipeImageSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.Serializer):
-    pass
+    liked_recipe_id = serializers.IntegerField()
