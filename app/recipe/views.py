@@ -169,15 +169,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(all_recipes, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'], url_path='like')
+    @action(detail=True, methods=['post'], serializer_class=LikeSerializer)
     def like_recipe(self, request, pk=None):
         recipe = self.get_object()
         user = request.user
 
-        liked_instance = Liked.objects.filter(user=user, liked_recipe=recipe).first()
-        if liked_instance:
-            liked_instance.delete()
-            return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)
+        if Liked.objects.filter(user=user, liked_recipe=recipe).exists():
+            Liked.objects.filter(user=user, liked_recipe=recipe).delete()
+            return Response({'status': 'unliked'}, status=status.HTTP_200_OK)
         else:
             Liked.objects.create(user=user, liked_recipe=recipe)
             return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)

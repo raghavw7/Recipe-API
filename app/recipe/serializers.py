@@ -147,3 +147,7 @@ class RecipeImageSerializer(serializers.ModelSerializer):
             self.validated_data['image'] = image_file
 
         return super().save(**kwargs)
+
+
+class LikeSerializer(serializers.Serializer):
+    pass
